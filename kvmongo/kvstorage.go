@@ -30,7 +30,7 @@ func (c *KVCollection[K, V]) Get(key K) (V, KVError) {
 	var err KVError
 	res := c.collection.FindOne(c.ctx, bson.M{"_id": key})
 	if res.Err() != nil {
-		return i.value, parseKVError(res.Err())
+		return i.Value, parseKVError(res.Err())
 	}
 	errD := res.Decode(&i)
 	if errD != nil {
@@ -41,7 +41,7 @@ func (c *KVCollection[K, V]) Get(key K) (V, KVError) {
 		}
 	}
 
-	return i.value, err
+	return i.Value, err
 }
 
 func (c *KVCollection[K, V]) Remove(key K) (bool, KVError) {
@@ -78,11 +78,11 @@ func (c *KVCollection[K, V]) PutF(key K, valueF func(interface{}) V) (bool, KVEr
 		opts := options.Update().SetUpsert(true)
 		filter := bson.M{
 			"_id":     key,
-			"version": old.version,
+			"version": old.Version,
 		}
 		update := bson.D{{Key: "$set", Value: bson.M{
-			"value":   valueF(old.value),
-			"version": old.version + 1,
+			"value":   valueF(old.Value),
+			"version": old.Version + 1,
 		}}}
 
 		_, errU := c.collection.UpdateOne(c.ctx, filter, update, opts)

@@ -3,9 +3,9 @@ package kvmongo
 import "strings"
 
 type item[K comparable, V any] struct {
-	id      K     `bson:"_id"`
-	version int64 `bson:"version"`
-	value   V     `bson:"value"`
+	Id      K     `bson:"_id"`
+	Version int64 `bson:"version"`
+	Value   V     `bson:"value"`
 }
 
 const (
